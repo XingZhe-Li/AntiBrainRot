@@ -1,0 +1,188 @@
+<resources>
+    <string name="app_name">AntiBrainRot</string>
+    <string name="accessibility_service_description">仅用于跟踪应用程序使用情况</string>
+
+    <!-- Tutorial Strings -->
+    <string name="tutorial_title">教程</string>
+    <string name="tutorial_back_button">返回</string>
+    <string name="tutorial_why_build_app_title">为什么要写这个App</string>
+    <string name="tutorial_why_build_app_paragraph_1">为什么要写这个App。只能说作者本人也是流媒体应用的重度成瘾患者。显然每天花费数小时浏览各种各样奇怪的短视频并养成习惯对向我这样的人而言除了为短视频公司们提供“注意力”价值外没有任何意义。</string>
+    <string name="tutorial_why_build_app_paragraph_2">然而想戒除这些App却很困难。App们本身为快速的成瘾回路做了各种优化设计，加上人本身的惰性以及有的时候你真的需要他们提供的一些内容，不难预料对这些App的成瘾会是普遍的现象。就我所见到的情况而言，每周在某个流媒体应用上16~17个小时并不是什么罕见的情况。于是我常想，如果这每周这16~17个小时都被用来做一些其他的事情，会怎么样。</string>
+    <string name="tutorial_why_build_app_paragraph_3">虽然现在的手机都提供了“屏幕使用时间”与使用限额功能，然而像使用时长打开次数这样的指标与基于他们的限额设计得有些过于简单了。</string>
+    <string name="tutorial_why_build_app_paragraph_4">一方面，超过限额时用户可以轻松地绕过（忽略此次限制）。另一方面，单纯的基于时长的限制总是会把真正需要App的时间占掉，直到限额耗完才给予提示——这有些太迟了，我认为一个更好的评价机制应该在可能陷入浪费时间状态时就给予提示。</string>
+    <string name="tutorial_why_build_app_paragraph_5">因此，我设计了自己的指标，这些指标将在下一节中详细介绍。</string>
+    <string name="tutorial_metrics_title">这些指标是什么</string>
+    <string name="tutorial_metrics_paragraph_1">即便我很早就有了做一个限额App的想法，却一直拖到最近才付诸实践，这之中的一大原因是我一直没有找到一个实现简单且实用的指标。</string>
+    <string name="tutorial_metrics_paragraph_2">这学期初我略读了《计算机网络：自顶向下方法》，脑中随之产生了一些有趣的想法——我们不妨将使用行为看作是网络流，如此就可以借用网络中的一些指标进行量化。</string>
+    <string name="tutorial_metrics_paragraph_3">最终我选定了流量控制中的一个模型即漏桶模型。漏桶模型用于在控制网络平均流量的同时给予网络响应突发流量的能力。</string>
+    <string name="tutorial_metrics_paragraph_4">具体情况就如同下面这副图像所显示的样子。流入桶中的水流代表你希望的平均流量速率，桶中剩下的水为突发流量作缓冲，而从桶中流出的水则代表网络实际的流量速率。</string>
+    <string name="tutorial_leaky_bucket_model">漏桶模型</string>
+    <string name="tutorial_metrics_paragraph_5">不过最终的模型与单纯的漏桶还是有一些区别，漏桶模型的设计出发点是控制实际的流量，而我们则要通过现有的流量数据进行建模，也就是将漏桶模型反过来用，根据使用情况推导用户的平均流量水平与他们需要的"桶"的大小。</string>
+    <string name="tutorial_metrics_paragraph_6">从此出发，我们得到了整个模型中最重要的两个指标：</string>
+    <string name="tutorial_use_time_factor">useTimeFactor - 水流速率（在应用上花费时间的估计百分比）</string>
+    <string name="tutorial_max_time_factor">maxTimeFactor - 桶大小（以秒为单位，表示使用"缓冲区"的容量）</string>
+    <string name="tutorial_metrics_paragraph_7">定义这两个指标后，我们又面临另一个问题。指标应该随时间变化。所以我又想到了另一个古早的想法，EMA（指数移动平均）。</string>
+    <string name="tutorial_metrics_paragraph_8">每一刻的指标情况应该由两部分构成，一部分是过去的指标情况，另一部分是今天的新数据带来的影响。此时就需要一个参数来决定保留多少过去的信息，对此我引入了一个新的参数，损失率（按理说应该叫做保持率），用来表示前一天数据占第二天数据的百分比。</string>
+    <string name="tutorial_metrics_paragraph_9">这么干完便又多了一个问题，在最开始时，我们所有的统计数据都是0，如果我们设置"损失率"为80%，这意味着80%的指标由昨天决定，那么就需要几天时间才能让我们的指标达到真实情况。</string>
+    <string name="tutorial_metrics_paragraph_10">为了解决这个问题，我又联想到深度学习优化器中常用的快速启动算法。在最初的几个小时（快速启动小时）内，我们的实际损失率将乘以一个fastStartFactor，使其成为较小的值，这样我们可以在较短的时间内达到真实的平均值水平。</string>
+
+    <!-- General UI Strings -->
+    <string name="general_back_button">返回</string>
+    <string name="general_ok_button">确定</string>
+    <string name="general_cancel_button">取消</string>
+    <string name="general_i_understand_button">我明白了</string>
+    <string name="general_i_m_quitting_button">我要退出！</string>
+    <string name="general_access_this_time">仅此次访问</string>
+
+    <!-- Navigation & Tab Strings -->
+    <string name="tab_tutorial">教程</string>
+    <string name="tab_status">状态</string>
+    <string name="tab_record">记录</string>
+    <string name="tab_metric">指标</string>
+    <string name="tab_control">控制</string>
+    <string name="tab_settings">设置</string>
+
+    <!-- Screen Titles -->
+    <string name="screen_title_status">状态</string>
+    <string name="screen_title_record">记录</string>
+    <string name="screen_title_metric">指标</string>
+    <string name="screen_title_control">控制</string>
+    <string name="screen_title_settings">设置</string>
+    <string name="screen_title_app_list">应用列表</string>
+    <string name="screen_title_configuration">配置</string>
+    <string name="screen_title_about">关于</string>
+    <string name="screen_title_ui_settings">用户界面</string>
+
+    <!-- Tab Descriptions -->
+    <string name="tab_description_tutorial">使用前请先阅读</string>
+    <string name="tab_description_status">当前状态</string>
+    <string name="tab_description_record">查看使用记录条目</string>
+    <string name="tab_description_metric">统计数据的折线图</string>
+    <string name="tab_description_control">查看被控制记录条目</string>
+    <string name="tab_description_settings">此处调参</string>
+
+    <!-- Settings Options -->
+    <string name="settings_option_app_list">应用列表</string>
+    <string name="settings_option_app_list_description">配置被追踪的应用条目</string>
+    <string name="settings_option_ui">用户界面</string>
+    <string name="settings_option_ui_description">用户界面选项</string>
+    <string name="settings_option_config">配置</string>
+    <string name="settings_option_config_description">核心算法参数配置</string>
+    <string name="settings_option_control">控制</string>
+    <string name="settings_option_control_description">超出阈值时的自动措施</string>
+    <string name="settings_option_about">关于</string>
+    <string name="settings_option_about_description">关于此应用的信息</string>
+
+    <!-- UI Settings -->
+    <string name="ui_setting_use_drawer">使用抽屉</string>
+    <string name="ui_setting_use_drawer_description">向右滑动使用抽屉</string>
+    <string name="ui_setting_exclude_system_apps">排除系统应用</string>
+    <string name="ui_setting_exclude_system_apps_description">隐藏系统应用</string>
+    <string name="ui_setting_display_least_length">显示最小长度</string>
+    <string name="ui_setting_display_least_length_description">当显示时忽略长度小于该值的项目（毫秒）</string>
+    <string name="ui_setting_default_value_ms">默认值：1000（毫秒）</string>
+
+    <!-- Control Items -->
+    <string name="control_item_evaluator_equation">评估方程</string>
+    <string name="control_item_use_time_factor_label">UseTimeFactor * </string>
+    <string name="control_item_use_time_factor_placeholder">默认值：一日中的秒数 </string>
+    <string name="control_item_max_time_factor_label">MaxTimeFactor * </string>
+    <string name="control_item_max_time_factor_placeholder">默认值：1.0 </string>
+    <string name="control_item_what_are_these">这些是什么？</string>
+    <string name="control_item_threshold_placeholder">默认值：0.00（始终干预）</string>
+    <string name="control_item_count_down_time_placeholder">默认值：20（秒）</string>
+    <string name="control_item_calm_down_time_placeholder">默认值：10（秒）</string>
+    <string name="control_item_what_are_these_sheet">本来这块还写了些东西的，但现在有教程了，所以其实不需要说什么。\n\n评估方程 = UseTimeFactorMultipler * UseTimeFactor + MaxTimeFactorMultipler * MaxTimeFactor。\n\n介入干预程序将在评估方程超过控制阈值时被启动。</string>
+
+    <!-- Metric Options -->
+    <string name="metric_options_save">保存</string>
+    <string name="metric_options_refresh">刷新</string>
+
+    <!-- Control Record -->
+    <string name="control_record_no_record_found">未找到记录！</string>
+    <string name="control_record_items_found">%d 个项目已找到</string>
+
+    <!-- Intro Screen -->
+    <string name="intro_app_name">AntiBrainRot</string>
+    <string name="intro_app_subtitle">帮助您跟踪和控制应用使用</string>
+
+    <!-- Prompt Screen -->
+    <string name="prompt_placeholder_no_less_than_3_char">不少于3个字符</string>
+
+    <!-- About Screen -->
+    <string name="about_screen_title">关于</string>
+    <string name="about_open_source_licenses">开源许可证</string>
+
+    <!-- Status Screen -->
+    <string name="status_max_time_factor_unit">（以秒为单位）</string>
+    <string name="status_use_time_factor_label">useTimeFactor</string>
+    <string name="status_max_time_factor_label">maxTimeFactor</string>
+    <string name="status_evaluator_label">evaluator</string>
+    <string name="status_fast_start_multiplier_label">fastStartMultiplier</string>
+
+    <!-- Record Screen -->
+    <string name="record_no_record_found">未找到记录！</string>
+    <string name="record_items_found">%d 个项目已找到</string>
+
+    <!-- Config Screen -->
+    <string name="config_max_loss_per_day_title">maxTimeFactor损失率</string>
+    <string name="config_max_loss_per_day_description">对桶的大小的日保持率</string>
+    <string name="config_usage_loss_per_day_title">useTimeFactor损失率</string>
+    <string name="config_usage_loss_per_day_description">useTimeFactor前一日的数值占第二日数值的比重</string>
+    <string name="config_fast_start_hours_title">快速启动小时</string>
+    <string name="config_fast_start_hours_description">真实遗忘率将在该小时内逐步增长到设定值</string>
+    <string name="config_fast_start_hours_placeholder">默认值：24.00</string>
+    <string name="config_track_on_title">启用追踪</string>
+    <string name="config_track_on_description">启用/禁用活动追踪器</string>
+    <string name="config_status_reset_title">状态重置</string>
+    <string name="config_status_reset_description">重置所有状态（历史数据仍会保留）</string>
+    <string name="config_status_reset_button_description">重置</string>
+    <string name="config_status_reset_snackbar">状态已重置！</string>
+
+    <!-- About Screen -->
+    <string name="about_version_info">版本 0.0.1\n版权 2025 XingZhe-Li，保留所有权利。</string>
+
+    <!-- Control Screen -->
+    <string name="control_threshold_title">控制阈值</string>
+    <string name="control_threshold_description">当评估超过此值时尝试干预</string>
+    <string name="control_on_title">控制开启</string>
+    <string name="control_on_description">启用/禁用控制器</string>
+    <string name="control_method_title">控制方法</string>
+    <string name="control_method_description">当评估器超过时将应用的操作</string>
+    <string name="control_calm_time_title">控制冷静时间</string>
+    <string name="control_calm_time_description">访问前冷静的秒数</string>
+    <string name="control_bypass_expire_interval_title">绕过过期间隔</string>
+    <string name="control_bypass_expire_interval_description">非活动后绕过将过期</string>
+
+    <!-- Metric Screen -->
+    <string name="metric_display_options">显示选项</string>
+    <string name="metric_evaluator_options">评估选项</string>
+    <string name="metric_evaluator_options_use_time_placeholder">默认值：SEC_OF_A_DAY</string>
+    <string name="metric_evaluator_options_max_time_placeholder">默认值：1.0</string>
+    <string name="metric_evaluator_options_threshold_label">阈值 *</string>
+    <string name="metric_evaluator_options_threshold_placeholder">默认值：0.0</string>
+    
+    <!-- Additional About Screen Strings -->
+    <string name="about_app_description">AntiBrainRot由XingZhe-Li创建，希望能帮助用户摆脱如TikTok、YouTube和Bilibili应用所形成的成瘾循环。\n\n也没什么好说的。作者本人是个开源主义者，并且这个软件的开发借助了诸多的开源项目的支持，故最终App在GPLv3协议下发布。</string>
+    <string name="about_author_info">噢噢，作者目前(25.12)还只是个CSU的大二学生，对完整的开发流程不太熟悉，有任何问题且请包涵指出 (mailto: NagatoYuki2024@qq.com)。</string>
+    <string name="about_license_info">开源许可证\n\n此应用使用以下开源库和组件：\n\n1. AndroidX 库（Apache 许可证 2.0）\n\n根据 Apache 许可证 2.0 版（"许可证"）授权；\n除非符合许可证，否则不得使用此文件。\n您可以在以下网址获取许可证副本：\n\n   http://www.apache.org/licenses/LICENSE-2.0\n\n除非适用法律要求或书面同意，根据许可证分发的软件\n按"原样"分发，不附带任何明示或暗示的保证或条件。\n有关特定语言管理权限和限制的详细信息，请参阅许可证。\n\n包括：\n- androidx.core:core-ktx\n- androidx.lifecycle:lifecycle-runtime-ktx\n- androidx.activity:activity-compose\n- androidx.compose bom, ui, graphics, tooling, foundation\n- androidx.compose.material3 和 material-icons-extended\n- androidx.navigation:navigation-compose\n- androidx.room:runtime, compiler, ktx\n- androidx.datastore:datastore-preferences\n\n2. JUnit（Eclipse Public License 1.0）\n\n保留所有权利。\n\n本程序和随附材料\n根据 Eclipse Public License v1.0 获得许可，\n该许可证随此发行版提供，并可在\nhttp://www.eclipse.org/legal/epl-v10.html 获取\n\n3. Vico 图表库（Apache 许可证 2.0）\n\nCopyright (C) 2022 Patryk Michalik\n\n根据 Apache 许可证 2.0 版（"许可证"）授权；\n除非符合许可证，否则不得使用此文件。\n您可以在以下网址获取许可证副本：\n\n   http://www.apache.org/licenses/LICENSE-2.0\n\n除非适用法律要求或书面同意，根据许可证分发的软件\n按"原样"分发，不附带任何明示或暗示的保证或条件。\n有关特定语言管理权限和限制的详细信息，请参阅许可证。\n\n4. Kotlin 编程语言（Apache 许可证 2.0）\n\nCopyright 2010-2024 JetBrains s.r.o. 和 Kotlin 贡献者\n\n根据 Apache 许可证 2.0 版（"许可证"）授权；\n除非符合许可证，否则不得使用此文件。\n您可以在以下网址获取许可证副本：\n\n   http://www.apache.org/licenses/LICENSE-2.0\n\n除非适用法律要求或书面同意，根据许可证分发的软件\n按"原样"分发，不附带任何明示或暗示的保证或条件。\n有关特定语言管理权限和限制的详细信息，请参阅许可证。\n\n5. 主要应用许可证\n\n此应用发布在 GPLv3 许可证下。\n请参阅主许可证文件了解完整条款和条件。</string>
+    
+    <!-- Tutorial HowToControl Strings -->
+    <string name="tutorial_how_to_control_title">自动控制如何使用</string>
+    <string name="tutorial_how_to_control_paragraph_1">AntiBrainRot最重要的功能之一就是自动控制。</string>
+    <string name="tutorial_how_to_control_paragraph_2">要启用此功能，请前往（在此应用中）设置 > 控制。在此配置两个因数。</string>
+    <string name="tutorial_how_to_control_paragraph_3">当两个因数分别与指标相乘后求和（即evaluator的值）超过阈值时，就会触发自动干预。</string>
+
+    <!-- Tutorial RequestForPermission Strings -->
+    <string name="tutorial_request_for_permission_title">请求权限</string>
+    <string name="tutorial_request_for_permission_paragraph1">    AntiBrainRot 的跟踪和控制功能基于无障碍服务。</string>
+    <string name="tutorial_request_for_permission_paragraph2">    因此，要使应用正常工作，您需要为此应用手动启用无障碍服务。</string>
+    <string name="tutorial_request_for_permission_enabled">无障碍服务已启用</string>
+    <string name="tutorial_request_for_permission_disabled">无障碍服务已禁用</string>
+
+    <!-- Prompt/Calm/Block Text Strings -->
+    <string name="prompt_threshold_exceeded_text">已超过阈值！\n在访问之前，\n不妨在此记录您此次打开该应用的原因。</string>
+    <string name="calm_threshold_exceeded_text">已超过阈值！\n累了困了就别刷手机！\n有精力不妨做些别的事情\n真确定有事要用也在这先冷静一会儿</string>
+    <string name="block_threshold_exceeded_text">已超过阈值！你上瘾了么？\n</string>
+    <string name="control_item_evaluator_equation_explain">用于与阈值比对的评估方程参数</string>
+</resources>

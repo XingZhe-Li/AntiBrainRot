@@ -1,0 +1,188 @@
+<resources>
+    <string name="app_name">AntiBrainRot</string>
+    <string name="accessibility_service_description">For Tracking Application Usage Purpose Only</string>
+
+    <!-- Tutorial Strings -->
+    <string name="tutorial_title">Tutorial</string>
+    <string name="tutorial_back_button">Back</string>
+    <string name="tutorial_why_build_app_title">Why Do I Build This App</string>
+    <string name="tutorial_why_build_app_paragraph_1">Apparently I would be one of those who got trapped in the digital world spending days and hours surfing and viewing meaningless memes and videos.</string>
+    <string name="tutorial_why_build_app_paragraph_2">After somehow discovering 16hrs wasted every week, I eventually made the resolution to build an app that help me track &amp; control.</string>
+    <string name="tutorial_why_build_app_paragraph_3">Even though app usage tracking is now a builtin feature in most android distributions, the metrics like launching times &amp; use time and blocking feature that based on use time are not so effective from my view.</string>
+    <string name="tutorial_why_build_app_paragraph_4">On one hand, you can easily skip all these Alert &amp; Confirm windows. On the other hand, I believe users should not only be denied till the use time excession but also be denied when they are likely to make an excession.</string>
+    <string name="tutorial_why_build_app_paragraph_5">So I designed my own metrics, which would be illustrated in detail in next section.</string>
+    <string name="tutorial_metrics_title">What are these metrics</string>
+    <string name="tutorial_metrics_paragraph_1">The truth is even though I had carried this idea with me for a long time, but honestly never had I found a metric that seems smart enough for me.</string>
+    <string name="tutorial_metrics_paragraph_2">Until lately I have read Computer Networking : A Top-Down Approach, where I found a model called leaky bucket.</string>
+    <string name="tutorial_metrics_paragraph_3">The leaky bucket model is initially designed for flow controlling. This analogy is very vivid. In real world, networks should be endowed with the capability to handle massive traffic in a short time. But in the long run, traffic should be limited at an constant average so our networking facilities won\'t be crashed.</string>
+    <string name="tutorial_metrics_paragraph_4">So let us imagine a leaky bucket, where water flowing into it denotes the constant average limit and water flowing out of it represents the real traffic. This model should happen to work just fine.</string>
+    <string name="tutorial_leaky_bucket_model">The Leaky Bucket Model</string>
+    <string name="tutorial_metrics_paragraph_5">However, there is a difference between leaky bucket and usage analysis. In usage analysis , we should apply leaky bucket model in a reversed direction (using actual traffic to deduce the water flow and bucket size).</string>
+    <string name="tutorial_metrics_paragraph_6">Then we got these metrics:</string>
+    <string name="tutorial_use_time_factor">useTimeFactor - the water flow rate (estimated percentage of time spending on apps)</string>
+    <string name="tutorial_max_time_factor">maxTimeFactor - the bucket size (in seconds. Denoting the capacity of your app usage \"buffer\")</string>
+    <string name="tutorial_metrics_paragraph_7">After defining these two metrics, we are now confronting one more problems. The metrics should change with time. So I took another idea that people are familiar with, EMA(exponential moving average).</string>
+    <string name="tutorial_metrics_paragraph_8">The Implementation is simple, factors at this instant should be composed by two parts, factors in the past and new behaviors. And these are what \"Loss Rate\" (honestly it should be called as keeping rate) is for.</string>
+    <string name="tutorial_metrics_paragraph_9">Then Here comes yet another problem, at the very beginning, all our statistics are 0, and if we set our \"Loss Rate\" to 80%, which means 80% of our metric are determined by that of yesterday, then it would take days to get our metrics to the real condition.</string>
+    <string name="tutorial_metrics_paragraph_10">To tackle this issue, a fast start algorithm is introduced. In the early hours (Fast Start Hours), our real loss rate would be multiplied by a fastStartFactor, making it a smaller value, so we can reach the real average in a shorter time.</string>
+
+    <!-- General UI Strings -->
+    <string name="general_back_button">Back</string>
+    <string name="general_ok_button">OK</string>
+    <string name="general_cancel_button">Cancel</string>
+    <string name="general_i_understand_button">I understand</string>
+    <string name="general_i_m_quitting_button">I\'m Quitting!!!</string>
+    <string name="general_access_this_time">access this time</string>
+
+    <!-- Navigation & Tab Strings -->
+    <string name="tab_tutorial">Tutorial</string>
+    <string name="tab_status">Status</string>
+    <string name="tab_record">Record</string>
+    <string name="tab_metric">Metric</string>
+    <string name="tab_control">Control</string>
+    <string name="tab_settings">Settings</string>
+
+    <!-- Screen Titles -->
+    <string name="screen_title_status">Status</string>
+    <string name="screen_title_record">Record</string>
+    <string name="screen_title_metric">Metric</string>
+    <string name="screen_title_control">Control</string>
+    <string name="screen_title_settings">Settings</string>
+    <string name="screen_title_app_list">App List</string>
+    <string name="screen_title_configuration">Configuration</string>
+    <string name="screen_title_about">About</string>
+    <string name="screen_title_ui_settings">User Interface</string>
+
+    <!-- Tab Descriptions -->
+    <string name="tab_description_tutorial">read if haven\'t yet</string>
+    <string name="tab_description_status">current status</string>
+    <string name="tab_description_record">detailed usage record</string>
+    <string name="tab_description_metric">line graph for statistics</string>
+    <string name="tab_description_control">control records</string>
+    <string name="tab_description_settings">where you configure</string>
+
+    <!-- Settings Options -->
+    <string name="settings_option_app_list">App List</string>
+    <string name="settings_option_app_list_description">enable / disable app tracking</string>
+    <string name="settings_option_ui">User Interface</string>
+    <string name="settings_option_ui_description">features for user interface</string>
+    <string name="settings_option_config">Configuration</string>
+    <string name="settings_option_config_description">configurations for core algorithm</string>
+    <string name="settings_option_control">Control</string>
+    <string name="settings_option_control_description">help you control your behaviors</string>
+    <string name="settings_option_about">About</string>
+    <string name="settings_option_about_description">about information of this app</string>
+
+    <!-- UI Settings -->
+    <string name="ui_setting_use_drawer">Use Drawer</string>
+    <string name="ui_setting_use_drawer_description">sliding right to use the drawer</string>
+    <string name="ui_setting_exclude_system_apps">Exclude System Apps</string>
+    <string name="ui_setting_exclude_system_apps_description">hide system apps</string>
+    <string name="ui_setting_display_least_length">Display Least Length</string>
+    <string name="ui_setting_display_least_length_description">ignore items with length less than when display (ms)</string>
+    <string name="ui_setting_default_value_ms">default : 1000 (ms)</string>
+
+    <!-- Control Items -->
+    <string name="control_item_evaluator_equation">Evaluator Equation</string>
+    <string name="control_item_use_time_factor_label">UseTimeFactor * </string>
+    <string name="control_item_use_time_factor_placeholder">default : SEC_OF_A_DAY </string>
+    <string name="control_item_max_time_factor_label">MaxTimeFactor * </string>
+    <string name="control_item_max_time_factor_placeholder">default : 1.0 </string>
+    <string name="control_item_what_are_these">What are these?</string>
+    <string name="control_item_threshold_placeholder">default : 0.00 (always intervene)</string>
+    <string name="control_item_count_down_time_placeholder">default : 20 (secs)</string>
+    <string name="control_item_calm_down_time_placeholder">default : 10 (secs)</string>
+    <string name="control_item_what_are_these_sheet">What about checking out the tutorial first? \n\n In summary, evaluator = useTimeFactorMultiplier * useTimeFactor +  maxTimeFactorMultiplier * maxTimeFactor\n\nIntervention would be activated when evaluator exceeds the threshold.</string>
+
+    <!-- Metric Options -->
+    <string name="metric_options_save">Save</string>
+    <string name="metric_options_refresh">Refresh</string>
+
+    <!-- Control Record -->
+    <string name="control_record_no_record_found">No Record was Found !</string>
+    <string name="control_record_items_found">%d items found</string>
+
+    <!-- Intro Screen -->
+    <string name="intro_app_name">AntiBrainRot</string>
+    <string name="intro_app_subtitle">helping you track &amp; control your app usage</string>
+
+    <!-- Prompt Screen -->
+    <string name="prompt_placeholder_no_less_than_3_char">no less than 3 char</string>
+
+    <!-- About Screen -->
+    <string name="about_screen_title">About</string>
+    <string name="about_open_source_licenses">OPEN-SOURCE LICENSES</string>
+
+    <!-- Status Screen -->
+    <string name="status_max_time_factor_unit"> (in secs)</string>
+    <string name="status_use_time_factor_label">useTimeFactor</string>
+    <string name="status_max_time_factor_label">maxTimeFactor</string>
+    <string name="status_evaluator_label">evaluator</string>
+    <string name="status_fast_start_multiplier_label">fastStartMultiplier</string>
+
+    <!-- Record Screen -->
+    <string name="record_no_record_found">No Record was Found !</string>
+    <string name="record_items_found">%d items found</string>
+
+    <!-- Config Screen -->
+    <string name="config_max_loss_per_day_title">Max Loss Per Day</string>
+    <string name="config_max_loss_per_day_description">loss rate for real time maximum bucket counting</string>
+    <string name="config_usage_loss_per_day_title">Usage Loss Per Day</string>
+    <string name="config_usage_loss_per_day_description">useTimeFactor are expected to be multiplied by this after 1 day</string>
+    <string name="config_fast_start_hours_title">Fast Start Hours</string>
+    <string name="config_fast_start_hours_description">real factor keeping rate would be identical after this(hrs)</string>
+    <string name="config_fast_start_hours_placeholder">default : 24.00</string>
+    <string name="config_track_on_title">Track On</string>
+    <string name="config_track_on_description">enable / disable activity tracker</string>
+    <string name="config_status_reset_title">Status Reset</string>
+    <string name="config_status_reset_description">reset all status (data remains)</string>
+    <string name="config_status_reset_button_description">Reset</string>
+    <string name="config_status_reset_snackbar">status is now reset!</string>
+
+    <!-- About Screen -->
+    <string name="about_version_info">version 0.0.1\ncopyright 2025 XingZhe-Li, All Rights Reserved.</string>
+
+    <!-- Control Screen -->
+    <string name="control_threshold_title">Control Threshold</string>
+    <string name="control_threshold_description">try to intervene when evaluation exceed this value</string>
+    <string name="control_on_title">Control On</string>
+    <string name="control_on_description">enable / disable controller</string>
+    <string name="control_method_title">Control Method</string>
+    <string name="control_method_description">actions that would be apply when evaluator exceeds</string>
+    <string name="control_calm_time_title">Control Calm Time</string>
+    <string name="control_calm_time_description">seconds to calm down before access</string>
+    <string name="control_bypass_expire_interval_title">Bypass Expire Interval</string>
+    <string name="control_bypass_expire_interval_description">bypass would be expired after inactivity of</string>
+
+    <!-- Metric Screen -->
+    <string name="metric_display_options">Display Options</string>
+    <string name="metric_evaluator_options">Evaluator Options</string>
+    <string name="metric_evaluator_options_use_time_placeholder">default: SEC_OF_A_DAY</string>
+    <string name="metric_evaluator_options_max_time_placeholder">default: 1.0</string>
+    <string name="metric_evaluator_options_threshold_label">Threshold *</string>
+    <string name="metric_evaluator_options_threshold_placeholder">default: 0.0</string>
+
+    <!-- Additional About Screen Strings -->
+    <string name="about_app_description">AntiBrainRot is created by XingZhe-Li (XingZhe-Li@github.com) with the hope of helping users break free from the addictive loops of apps like TikTok, YouTube, and Bilibili.\n\nThat\'s all for now. Wishing you a great day and a journey toward gaining self-sovereignty.\n\nWhat\'s worth mentioning though, is that this app wouldn\'t be made without the help of open-source projects. To add more color to the open-source world , this application is released under the GPLv3.</string>
+    <string name="about_author_info">Hey , if you find this app inspiring or are interested in building apps like this, feel free to contact me at nagatoyuki2024@qq.com\n\nThe author at this moment (25.12) is a sophomore majoring in Software Engineering at Central South University China , and is still exploring the infinity of software.\n\nPlease excuse any inaccuracies or shortcomings.</string>
+    <string name="about_license_info">OPEN SOURCE LICENSES\n\nThis application uses the following open source libraries and components:\n\n1. AndroidX Libraries (Apache License 2.0)\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\n   http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n\nIncludes:\n- androidx.core:core-ktx\n- androidx.lifecycle:lifecycle-runtime-ktx\n- androidx.activity:activity-compose\n- androidx.compose bom, ui, graphics, tooling, foundation\n- androidx.compose.material3 and material-icons-extended\n- androidx.navigation:navigation-compose\n- androidx.room:runtime, compiler, ktx\n- androidx.datastore:datastore-preferences\n\n2. JUnit (Eclipse Public License 1.0)\n\nAll rights reserved.\n\nThis program and the accompanying materials\nare made available under the terms of the Eclipse Public License v1.0\nwhich accompanies this distribution, and is available at\nhttp://www.eclipse.org/legal/epl-v10.html\n\n3. Vico Chart Library (Apache License 2.0)\n\nCopyright (C) 2022 Patryk Michalik\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\n   http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n\n4. Kotlin Programming Language (Apache License 2.0)\n\nCopyright 2010-2024 JetBrains s.r.o. and Kotlin contributors\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\n   http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n\n5. Main Application License\n\nThis application is released under the GPLv3 license.\nSee the main license file for complete terms and conditions.</string>
+
+    <!-- Tutorial HowToControl Strings -->
+    <string name="tutorial_how_to_control_title">How to Control</string>
+    <string name="tutorial_how_to_control_paragraph_1">One of the best features of antibrainrot is auto blocking when threshold were exceeded.</string>
+    <string name="tutorial_how_to_control_paragraph_2">To enable this feature, go to (in this app) Settings > Control. Then pick two multipliers.</string>
+    <string name="tutorial_how_to_control_paragraph_3">For every time when the sum of multiplied factors (which equals to evaluator) surpasses the threshold, intervention would be triggered.</string>
+
+    <!-- Tutorial Request for Permission -->
+    <string name="tutorial_request_for_permission_title">Request for Permission</string>
+    <string name="tutorial_request_for_permission_paragraph1">"    AntiBrainRot's Capability of tracking and controlling are based on accessibility."</string>
+    <string name="tutorial_request_for_permission_paragraph2">"    So To make the app work correctly, you'd need to manually trigger accessibility service for this app."</string>
+    <string name="tutorial_request_for_permission_enabled">Accessibility Enabled</string>
+    <string name="tutorial_request_for_permission_disabled">Accessibility Disabled</string>
+
+    <!-- Prompt/Calm/Block Text Strings -->
+    <string name="prompt_threshold_exceeded_text">Threshold exceeded!\nBefore accessing ,\ntry record the reason ,\nfor which you are opening this app .</string>
+    <string name="calm_threshold_exceeded_text">Threshold exceeded!\nBefore opening the app,\nmaybe think about why you open the app.\nIf you are tired, then get sleep.\nIf you are bored, then build your hobby.\nIf you are assured that this is business,\nyour access will be granted after</string>
+    <string name="block_threshold_exceeded_text">Threshold exceeded!\nTry prove to me that you are not addicted!</string>
+    <string name="control_item_evaluator_equation_explain">evaluator equation for threshold calculation</string>
+</resources>
