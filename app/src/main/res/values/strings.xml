@@ -185,4 +185,9 @@
     <string name="calm_threshold_exceeded_text">Threshold exceeded!\nBefore opening the app,\nmaybe think about why you open the app.\nIf you are tired, then get sleep.\nIf you are bored, then build your hobby.\nIf you are assured that this is business,\nyour access will be granted after</string>
     <string name="block_threshold_exceeded_text">Threshold exceeded!\nTry prove to me that you are not addicted!</string>
     <string name="control_item_evaluator_equation_explain">evaluator equation for threshold calculation</string>
+
+    <!-- settings_ui_language  -->
+    <string name="settings_ui_change_display_language">change display language</string>
+    <string name="settings_ui_language">Language</string>
+    <string name="restarting_the_app_may_be_required">restarting the app may be required</string>
 </resources>

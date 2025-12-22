@@ -1,5 +1,8 @@
 package com.github.xingzheli.antibrainrot.data.datastore
 
+import android.content.res.Resources
+import androidx.core.os.ConfigurationCompat
+
 object PreferenceDefaults {
     const val CONFIG_TRACK_ON_DEFAULT                     = true
     const val UI_USE_DRAWER_DEFAULT                       = false
@@ -22,4 +25,8 @@ object PreferenceDefaults {
     )
     const val CONTROL_CALM_TIME_DEFAULT = 20
     const val CONTROL_BYPASS_EXPIRE_INTERVAL_DEFAULT = 10
+
+    val UI_LANGUAGE_DEFAULT : String
+        get() = ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0]!!.language
+    val UI_LANGUAGE_DEFAULT_LIST = listOf("en","zh")
 }

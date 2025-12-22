@@ -14,6 +14,7 @@ import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.CONTR
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.CONTROL_USE_TIME_FACTOR_MULTIPLIER_DEFAULT
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.UI_DISPLAY_AT_LEAST_LENGTH_DEFAULT
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.UI_EXCLUDE_SYSTEM_APPS_DEFAULT
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.UI_LANGUAGE_DEFAULT
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.UI_USE_DRAWER_DEFAULT
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceKeys.CONFIG_FAST_START_HOURS
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceKeys.CONFIG_MAX_LOSS_RATE_PER_DAY
@@ -28,6 +29,7 @@ import com.github.xingzheli.antibrainrot.data.datastore.PreferenceKeys.CONTROL_T
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceKeys.CONTROL_USE_TIME_FACTOR_MULTIPLIER
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceKeys.UI_DISPLAY_AT_LEAST_LENGTH
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceKeys.UI_EXCLUDE_SYSTEM_APPS
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceKeys.UI_LANGUAGE
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceKeys.UI_USE_DRAWER
 import com.github.xingzheli.antibrainrot.shared.AppGlobals.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -174,6 +176,16 @@ object PreferenceProxy {
     suspend fun setUiDisplayAtLeastLength(len : Long) {
         preferencesDataStore.edit {
             it[UI_DISPLAY_AT_LEAST_LENGTH] = len
+        }
+    }
+
+    suspend fun getUiLanguage() : String {
+        return preferencesDataStore.data.first()[UI_LANGUAGE] ?: UI_LANGUAGE_DEFAULT
+    }
+
+    suspend fun setUiLanguage(language : String) {
+        preferencesDataStore.edit {
+            it[UI_LANGUAGE] = language
         }
     }
 }

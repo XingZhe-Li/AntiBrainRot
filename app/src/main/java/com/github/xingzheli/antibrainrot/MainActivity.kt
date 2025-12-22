@@ -15,16 +15,28 @@
 
 package com.github.xingzheli.antibrainrot
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getUiLanguage
 import com.github.xingzheli.antibrainrot.ui.interfaces.app.AppContainer
+import com.github.xingzheli.antibrainrot.utils.LocaleHelper
+import kotlinx.coroutines.runBlocking
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent { AppContainer() }
+    }
+
+    override fun attachBaseContext(base: Context) {
+        val locale: String
+        runBlocking {
+            locale = getUiLanguage()
+        }
+        super.attachBaseContext(LocaleHelper.setLocale(base, locale))
     }
 }

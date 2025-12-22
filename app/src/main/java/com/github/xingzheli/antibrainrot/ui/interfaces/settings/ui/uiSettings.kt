@@ -17,6 +17,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -44,19 +50,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.xingzheli.antibrainrot.R
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.CONTROL_BYPASS_EXPIRE_INTERVAL_DEFAULT
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.CONTROL_METHOD_DEFAULT
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.CONTROL_METHOD_DEFAULT_LIST
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.UI_DISPLAY_AT_LEAST_LENGTH_DEFAULT
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.UI_EXCLUDE_SYSTEM_APPS_DEFAULT
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.UI_LANGUAGE_DEFAULT
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.UI_LANGUAGE_DEFAULT_LIST
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.UI_USE_DRAWER_DEFAULT
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getControlBypassExpireInterval
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getControlMethod
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getExcludeSystemApps
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getUIUseDrawer
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getUiDisplayAtLeastLength
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getUiLanguage
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.setControlBypassExpireInterval
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.setControlMethod
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.setExcludeSystemApps
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.setUIUseDrawer
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.setUiDisplayAtLeastLength
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.setUiLanguage
 import com.github.xingzheli.antibrainrot.ui.interfaces.context.LocalNavHostController
 import com.github.xingzheli.antibrainrot.ui.interfaces.context.LocalSnackBarHostState
+import com.github.xingzheli.antibrainrot.ui.interfaces.settings.control.ControlCalmTime
 import com.github.xingzheli.antibrainrot.ui.interfaces.settings.control.ControlItemAutoHeight
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -76,7 +91,7 @@ fun UISettingsTopbar(scrollState: ScrollState) {
         Modifier
             .fillMaxWidth()
             .height(64.dp)
-            .padding(16.dp,0.dp),
+            .padding(16.dp, 0.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
@@ -127,6 +142,7 @@ fun UseDrawerOption() {
     var uiUseDrawer by remember { mutableStateOf(UI_USE_DRAWER_DEFAULT) }
     val snackbarHostState = LocalSnackBarHostState.current
     val coroutineScope = rememberCoroutineScope()
+    val restartString = stringResource(R.string.restarting_the_app_may_be_required)
 
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
@@ -138,7 +154,7 @@ fun UseDrawerOption() {
         Row (
             Modifier
                 .fillMaxWidth()
-                .padding(16.dp,0.dp),
+                .padding(16.dp, 0.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
@@ -161,7 +177,7 @@ fun UseDrawerOption() {
                     setUIUseDrawer(it)
                     uiUseDrawer = it
                     launch {
-                        snackbarHostState.showSnackbar("restarting the app may be required")
+                        snackbarHostState.showSnackbar(restartString)
                     }
                 }
             })
@@ -184,7 +200,7 @@ fun ExcludeSystemAppsOption() {
         Row (
             Modifier
                 .fillMaxWidth()
-                .padding(16.dp,0.dp),
+                .padding(16.dp, 0.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
@@ -217,7 +233,7 @@ fun UISettingsItemsContainer() {
     Box (
         Modifier
             .fillMaxWidth()
-            .padding(24.dp,0.dp)
+            .padding(24.dp, 0.dp)
             .clip(RoundedCornerShape(24.dp))
     ) {
         Column (
@@ -228,6 +244,7 @@ fun UISettingsItemsContainer() {
             UseDrawerOption()
             ExcludeSystemAppsOption()
             UIDisplayLeastLength()
+            UiLanguage()
         }
     }
 }
@@ -246,7 +263,7 @@ fun UISettingsContainer(scrollState: ScrollState) {
     ) {
         Box (
             Modifier
-                .padding(24.dp,0.dp)
+                .padding(24.dp, 0.dp)
                 .height(100.dp)
                 .fillMaxWidth(),
             contentAlignment = Alignment.BottomStart
@@ -296,7 +313,9 @@ fun UIDisplayLeastLength() {
 
     ControlItemAutoHeight {
         Column (
-            Modifier.padding(16.dp).fillMaxSize()
+            Modifier
+                .padding(16.dp)
+                .fillMaxSize()
         ) {
             Text(
                 stringResource(R.string.ui_setting_display_least_length),
@@ -324,8 +343,92 @@ fun UIDisplayLeastLength() {
                 placeholder = { Text(stringResource(R.string.ui_setting_default_value_ms)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth().padding(0.dp,8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(0.dp, 8.dp),
             )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UiLanguage() {
+    var expanded by remember { mutableStateOf(false) }
+    var selectedItem by remember { mutableStateOf(UI_LANGUAGE_DEFAULT) }
+    val options = UI_LANGUAGE_DEFAULT_LIST
+    val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = LocalSnackBarHostState.current
+    val restartString = stringResource(R.string.restarting_the_app_may_be_required)
+
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            selectedItem = getUiLanguage()
+        }
+    }
+
+    ControlItemAutoHeight {
+        Column (
+            Modifier
+                .padding(16.dp)
+                .fillMaxSize()
+        ) {
+            Text(
+                stringResource(R.string.settings_ui_language),
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold,
+            )
+
+            Text(
+                stringResource(R.string.settings_ui_change_display_language),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = !expanded },
+                modifier = Modifier
+                    .padding(0.dp, 8.dp)
+                    .fillMaxWidth()
+            ) {
+                OutlinedTextField(
+                    value = selectedItem,
+                    onValueChange = {},
+                    readOnly = true,
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                    colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                    modifier = Modifier
+                        .menuAnchor(
+                            type = ExposedDropdownMenuAnchorType.PrimaryNotEditable,
+                            enabled = true
+                        )
+                        .fillMaxWidth()
+                )
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier.exposedDropdownSize()
+                ) {
+                    options.forEach { option ->
+                        DropdownMenuItem(
+                            text = { Text(option) },
+                            onClick = {
+                                coroutineScope.launch {
+                                    withContext(Dispatchers.IO) {
+                                        setUiLanguage(option)
+                                        selectedItem = option
+                                        expanded = false
+
+                                        snackbarHostState.showSnackbar(restartString)
+                                    }
+                                }
+                            },
+                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                        )
+                    }
+                }
+            }
         }
     }
 }

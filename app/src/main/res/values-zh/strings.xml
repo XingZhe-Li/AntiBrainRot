@@ -185,4 +185,8 @@
     <string name="calm_threshold_exceeded_text">已超过阈值！\n累了困了就别刷手机！\n有精力不妨做些别的事情\n真确定有事要用也在这先冷静一会儿</string>
     <string name="block_threshold_exceeded_text">已超过阈值！你上瘾了么？\n</string>
     <string name="control_item_evaluator_equation_explain">用于与阈值比对的评估方程参数</string>
+
+    <!-- settings_ui_language  -->
+    <string name="settings_ui_change_display_language">更改显示语言</string>
+    <string name="settings_ui_language">语言</string>
 </resources>

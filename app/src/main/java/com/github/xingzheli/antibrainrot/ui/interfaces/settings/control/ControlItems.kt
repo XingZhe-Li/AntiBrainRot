@@ -102,7 +102,9 @@ fun ControlEvaluator() {
                         textFieldValue = newValue
                         val newValueFloat = newValue.toFloatOrNull() ?: CONTROL_USE_TIME_FACTOR_MULTIPLIER_DEFAULT
                         coroutineScope.launch {
-                            setControlUseTimeFactorMultiplier(newValueFloat)
+                            withContext(Dispatchers.IO) {
+                                setControlUseTimeFactorMultiplier(newValueFloat)
+                            }
                         }
                     }
                 },
@@ -122,7 +124,9 @@ fun ControlEvaluator() {
                         textFieldValue2 = newValue
                         val newValueFloat = newValue.toFloatOrNull() ?: CONTROL_MAX_TIME_FACTOR_MULTIPLIER_DEFAULT
                         coroutineScope.launch {
-                            setControlMaxTimeFactorMultiplier(newValueFloat)
+                            withContext(Dispatchers.IO) {
+                                setControlMaxTimeFactorMultiplier(newValueFloat)
+                            }
                         }
                     }
                 },
@@ -216,7 +220,9 @@ fun ControlThreshold() {
                         textFieldValue = newValue
                         val newValueFloat = newValue.toFloatOrNull() ?: CONTROL_THRESHOLD_DEFAULT
                         coroutineScope.launch {
-                            setControlThreshold(newValueFloat)
+                            withContext(Dispatchers.IO) {
+                                setControlThreshold(newValueFloat)
+                            }
                         }
                     }
                 },
@@ -266,8 +272,10 @@ fun ControlOn() {
 
             Switch (controlOn, onCheckedChange = {
                 coroutineScope.launch {
-                    setControlOn(!controlOn)
-                    controlOn = !controlOn
+                    withContext(Dispatchers.IO) {
+                        setControlOn(!controlOn)
+                        controlOn = !controlOn
+                    }
                 }
             })
         }
@@ -336,9 +344,11 @@ fun ControlMethod() {
                             text = { Text(option) },
                             onClick = {
                                 coroutineScope.launch {
-                                    setControlMethod(option)
-                                    selectedItem = option
-                                    expanded = false
+                                    withContext(Dispatchers.IO) {
+                                        setControlMethod(option)
+                                        selectedItem = option
+                                        expanded = false
+                                    }
                                 }
                             },
                             contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
@@ -390,7 +400,9 @@ fun ControlCalmTime() {
                         textFieldValue = newValue
                         val newValueInt = newValue.toIntOrNull() ?: CONTROL_CALM_TIME_DEFAULT
                         coroutineScope.launch {
-                            setControlCalmTime(newValueInt)
+                            withContext(Dispatchers.IO) {
+                                setControlCalmTime(newValueInt)
+                            }
                         }
                     }
                 },
@@ -441,7 +453,9 @@ fun ControlBypassExpireInterval() {
                         textFieldValue = newValue
                         val newValueInt = newValue.toIntOrNull() ?: CONTROL_BYPASS_EXPIRE_INTERVAL_DEFAULT
                         coroutineScope.launch {
-                            setControlBypassExpireInterval(newValueInt)
+                            withContext(Dispatchers.IO) {
+                                setControlBypassExpireInterval(newValueInt)
+                            }
                         }
                     }
                 },

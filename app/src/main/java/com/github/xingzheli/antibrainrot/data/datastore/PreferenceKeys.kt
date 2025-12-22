@@ -32,4 +32,6 @@ object PreferenceKeys {
         intPreferencesKey("control_calm_time")
     val CONTROL_BYPASS_EXPIRE_INTERVAL =
         intPreferencesKey("control_bypass_expire_interval")
+    val UI_LANGUAGE =
+        stringPreferencesKey("ui_language")
 }
