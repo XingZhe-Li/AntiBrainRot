@@ -140,7 +140,7 @@
     <string name="config_status_reset_snackbar">状态已重置！</string>
 
     <!-- About Screen -->
-    <string name="about_version_info">版本 0.0.2\n版权 2025 XingZhe-Li，保留所有权利。</string>
+    <string name="about_version_info">版本 0.0.3\n版权 2025 XingZhe-Li，保留所有权利。</string>
 
     <!-- Control Screen -->
     <string name="control_threshold_title">控制阈值</string>
