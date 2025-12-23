@@ -189,5 +189,14 @@
     <!-- settings_ui_language  -->
     <string name="settings_ui_change_display_language">change display language</string>
     <string name="settings_ui_language">Language</string>
+
     <string name="restarting_the_app_may_be_required">restarting the app may be required</string>
+    <string name="settings_config_track_method">Track Method</string>
+    <string name="settings_config_two_methods_of_tracking_usage">two methods of tracking usage</string>
+    <string name="tutorial_usageStats_permission_granted">Permission Granted</string>
+    <string name="tutorial_usageStats_permission_not_granted">Permission not granted</string>
+    <string name="tutorial_usage_events_based_tracking">Usage Events Based Tracking</string>
+    <string name="tutorial_usage_events_based_tracking_paragraph1">"Since accessibility need to keep your application alive in the background, and manage to not be killed both by system and users. "</string>
+    <string name="tutorial_usage_events_based_tracking_paragraph2">I\'m now proposing a new model that automatically update all metrics based on system provided appUsageEvents data.</string>
+    <string name="tutorial_usage_events_based_tracking_paragraph3">But user permission is also required!</string>
 </resources>

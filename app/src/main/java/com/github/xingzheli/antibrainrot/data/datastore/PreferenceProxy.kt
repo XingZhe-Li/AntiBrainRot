@@ -3,6 +3,7 @@ package com.github.xingzheli.antibrainrot.data.datastore
 import androidx.datastore.preferences.core.edit
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.CONFIG_FAST_START_HOURS_DEFAULT
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.CONFIG_MAX_LOSS_RATE_PER_DAY_DEFAULT
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.CONFIG_TRACK_METHOD_DEFAULT
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.CONFIG_TRACK_ON_DEFAULT
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.CONFIG_USAGE_LOSS_RATE_PER_DAY_DEFAULT
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.CONTROL_BYPASS_EXPIRE_INTERVAL_DEFAULT
@@ -18,6 +19,7 @@ import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.UI_LA
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.UI_USE_DRAWER_DEFAULT
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceKeys.CONFIG_FAST_START_HOURS
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceKeys.CONFIG_MAX_LOSS_RATE_PER_DAY
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceKeys.CONFIG_TRACK_METHOD
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceKeys.CONFIG_TRACK_ON
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceKeys.CONFIG_USAGE_LOSS_RATE_PER_DAY
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceKeys.CONTROL_BYPASS_EXPIRE_INTERVAL
@@ -186,6 +188,16 @@ object PreferenceProxy {
     suspend fun setUiLanguage(language : String) {
         preferencesDataStore.edit {
             it[UI_LANGUAGE] = language
+        }
+    }
+
+    suspend fun getConfigTrackMethod() : String {
+        return preferencesDataStore.data.first()[CONFIG_TRACK_METHOD] ?: CONFIG_TRACK_METHOD_DEFAULT
+    }
+
+    suspend fun setConfigTrackMethod(option : String) {
+        preferencesDataStore.edit {
+            it[CONFIG_TRACK_METHOD] = option
         }
     }
 }

@@ -35,6 +35,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.github.xingzheli.antibrainrot.core.tracker.onAppEffect
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getUIUseDrawer
 import com.github.xingzheli.antibrainrot.ui.interfaces.RegistryEntry
 import com.github.xingzheli.antibrainrot.ui.interfaces.context.LocalNavHostController
@@ -46,9 +47,19 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
+fun AppEffect() {
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            onAppEffect()
+        }
+    }
+}
+
+@Composable
 fun AppContainer() {
     val snackbarHostState = remember { SnackbarHostState() }
 
+    AppEffect() // for task execution purpose.
     CompositionLocalProvider (
         LocalSnackBarHostState provides snackbarHostState
     ) {

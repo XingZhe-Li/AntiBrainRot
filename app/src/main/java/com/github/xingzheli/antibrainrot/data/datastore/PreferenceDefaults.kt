@@ -29,4 +29,7 @@ object PreferenceDefaults {
     val UI_LANGUAGE_DEFAULT : String
         get() = ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0]!!.language
     val UI_LANGUAGE_DEFAULT_LIST = listOf("en","zh")
+
+    const val CONFIG_TRACK_METHOD_DEFAULT = "accessibility"
+    val CONFIG_TRACK_METHOD_DEFAULT_LIST = listOf("accessibility","appUsageEvent")
 }

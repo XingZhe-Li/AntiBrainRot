@@ -12,6 +12,8 @@ object PreferenceKeys {
     val UI_EXCLUDE_SYSTEM_APPS  = booleanPreferencesKey("ui_exclude_system_apps")
     val UI_DISPLAY_AT_LEAST_LENGTH =
         longPreferencesKey("ui_display_at_least_length")
+    val CONFIG_TRACK_METHOD =
+        stringPreferencesKey(name = "config_track_method")
     val CONFIG_USAGE_LOSS_RATE_PER_DAY =
         floatPreferencesKey(name = "config_usage_loss_rate_per_day")
     val CONFIG_MAX_LOSS_RATE_PER_DAY =

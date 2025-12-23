@@ -189,4 +189,15 @@
     <!-- settings_ui_language  -->
     <string name="settings_ui_change_display_language">更改显示语言</string>
     <string name="settings_ui_language">语言</string>
+
+    <string name="restarting_the_app_may_be_required">重启后生效</string>
+    <string name="settings_config_track_method">追踪模式</string>
+    <string name="settings_config_two_methods_of_tracking_usage">两种基于不同方法的追踪模式</string>
+
+    <string name="tutorial_usageStats_permission_granted">权限已授予</string>
+    <string name="tutorial_usageStats_permission_not_granted">权限未授予</string>
+    <string name="tutorial_usage_events_based_tracking">基于使用事件的追踪</string>
+    <string name="tutorial_usage_events_based_tracking_paragraph1">由于无障碍服务保活很麻烦，容易被杀，想来想去还是搞了一个基于系统记录的使用数据的指标更新，会在每次打开应用时计算更新值</string>
+    <string name="tutorial_usage_events_based_tracking_paragraph2">基于使用事件的追踪模式不支持拦截，且同样不支持关闭追踪（如果你不需要就一直别打开App），那么数据永远都不会得到更新。</string>
+    <string name="tutorial_usage_events_based_tracking_paragraph3">使用这一模式的权限在此开启：</string>
 </resources>

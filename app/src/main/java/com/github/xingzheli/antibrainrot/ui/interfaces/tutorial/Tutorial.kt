@@ -45,7 +45,9 @@ import androidx.compose.ui.unit.dp
 import com.github.xingzheli.antibrainrot.R
 import com.github.xingzheli.antibrainrot.ui.interfaces.context.LocalNavHostController
 import com.github.xingzheli.antibrainrot.utils.isAccessibilityServiceEnabled
+import com.github.xingzheli.antibrainrot.utils.isUsageStatsPermissionGranted
 import com.github.xingzheli.antibrainrot.utils.openAccessibilitySettings
+import com.github.xingzheli.antibrainrot.utils.openUsageStatsSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -194,7 +196,6 @@ fun RequestForPermission() {
         withContext(Dispatchers.IO) {
             while (true) {
                 accessibilityEnabled = isAccessibilityServiceEnabled(activityContext,serviceName)
-                println("scanned = $accessibilityEnabled")
                 delay(3000)
             }
         }
@@ -243,6 +244,7 @@ fun TutorialContent() {
     WhyDoIBuildThisApp()
     WhatAreTheseMetrics()
     HowToControl()
+    AppUsageBasedTracking()
 }
 
 @Composable
@@ -258,6 +260,65 @@ fun HowToControl() {
     Text("    " + stringResource(R.string.tutorial_how_to_control_paragraph_1))
     Text("    " + stringResource(R.string.tutorial_how_to_control_paragraph_2))
     Text("    " + stringResource(R.string.tutorial_how_to_control_paragraph_3))
+}
+
+@Composable
+fun AppUsageBasedTracking() {
+    var usageStatsPermissionGranted by remember { mutableStateOf(false) }
+    val checkIcon = if (usageStatsPermissionGranted) Icons.Default.RadioButtonChecked else Icons.Default.RadioButtonUnchecked
+    val activityContext = LocalContext.current
+
+    val gotoSettings = {
+        openUsageStatsSettings(activityContext)
+    }
+
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            while (true) {
+                usageStatsPermissionGranted = isUsageStatsPermissionGranted(activityContext)
+                delay(3000)
+            }
+        }
+    }
+
+    Spacer(Modifier.height(8.dp))
+
+    Text(
+        stringResource(R.string.tutorial_usage_events_based_tracking),
+        style = MaterialTheme.typography.titleLarge,
+        fontWeight = FontWeight.SemiBold
+    )
+
+    Text("    " + stringResource(R.string.tutorial_usage_events_based_tracking_paragraph1))
+    Text("    " + stringResource(R.string.tutorial_usage_events_based_tracking_paragraph2))
+    Text("    " + stringResource(R.string.tutorial_usage_events_based_tracking_paragraph3))
+
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .clickable(onClick = gotoSettings)
+            .border(
+                1.dp,
+                MaterialTheme.colorScheme.outline.copy(alpha = 0.4f),
+                RoundedCornerShape(8.dp)
+            )
+            .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            checkIcon,
+            contentDescription = null,
+            modifier = Modifier.padding(8.dp)
+        )
+
+        Text(
+            if (usageStatsPermissionGranted) stringResource(R.string.tutorial_usageStats_permission_granted) else stringResource(
+                R.string.tutorial_usageStats_permission_not_granted
+            ),
+            style = MaterialTheme.typography.titleLarge
+        )
+    }
 }
 
 @Composable

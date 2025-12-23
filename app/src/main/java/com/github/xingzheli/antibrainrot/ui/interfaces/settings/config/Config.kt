@@ -21,6 +21,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -52,12 +58,20 @@ import com.github.xingzheli.antibrainrot.R
 import com.github.xingzheli.antibrainrot.data.Accessor.insertMetricRecord
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.CONFIG_FAST_START_HOURS_DEFAULT
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.CONFIG_MAX_LOSS_RATE_PER_DAY_DEFAULT
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.CONFIG_TRACK_METHOD_DEFAULT
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.CONFIG_TRACK_METHOD_DEFAULT_LIST
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.CONFIG_TRACK_ON_DEFAULT
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.CONFIG_USAGE_LOSS_RATE_PER_DAY_DEFAULT
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.CONTROL_METHOD_DEFAULT
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceDefaults.CONTROL_METHOD_DEFAULT_LIST
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getConfigTrackMethod
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getControlMethod
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getFastStartHours
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getMaxLossRatePerDay
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getTrackOn
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getUsageLossRatePerDay
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.setConfigTrackMethod
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.setControlMethod
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.setFastStartHours
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.setMaxLossRatePerDay
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.setTrackOn
@@ -65,6 +79,8 @@ import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.setUsage
 import com.github.xingzheli.antibrainrot.data.room.Metric
 import com.github.xingzheli.antibrainrot.ui.interfaces.context.LocalNavHostController
 import com.github.xingzheli.antibrainrot.ui.interfaces.context.LocalSnackBarHostState
+import com.github.xingzheli.antibrainrot.ui.interfaces.settings.control.ControlCalmTime
+import com.github.xingzheli.antibrainrot.ui.interfaces.settings.control.ControlItemAutoHeight
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -321,7 +337,9 @@ fun ConfigFastStartHours() {
                     placeholder = { Text(stringResource(R.string.config_fast_start_hours_placeholder)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     singleLine = true,
-                    modifier = Modifier.fillMaxWidth().padding(0.dp,8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(0.dp, 8.dp),
                 )
             }
         }
@@ -385,6 +403,7 @@ fun ConfigItemsContainer() {
             Arrangement.spacedBy(2.dp)
         ) {
             ConfigTrackOn()
+            ConfigTrackMethod()
             ConfigUsageLossPerDay()
             ConfigMaxLossPerDay()
             ConfigFastStartHours()
@@ -425,6 +444,84 @@ fun ConfigContainer(scrollState: ScrollState) {
                 .height(24.dp)
         )
         ConfigItemsContainer()
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ConfigTrackMethod() {
+    var expanded by remember { mutableStateOf(false) }
+    var selectedItem by remember { mutableStateOf(CONFIG_TRACK_METHOD_DEFAULT) }
+    val options = CONFIG_TRACK_METHOD_DEFAULT_LIST
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            selectedItem = getConfigTrackMethod()
+        }
+    }
+
+    ControlItemAutoHeight {
+        Column (
+            Modifier
+                .padding(16.dp)
+                .fillMaxSize()
+        ) {
+            Text(
+                stringResource(R.string.settings_config_track_method),
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold,
+            )
+
+            Text(
+                stringResource(R.string.settings_config_two_methods_of_tracking_usage),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = !expanded },
+                modifier = Modifier
+                    .padding(0.dp, 8.dp)
+                    .fillMaxWidth()
+            ) {
+                OutlinedTextField(
+                    value = selectedItem,
+                    onValueChange = {},
+                    readOnly = true,
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                    colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                    modifier = Modifier
+                        .menuAnchor(
+                            type = ExposedDropdownMenuAnchorType.PrimaryNotEditable,
+                            enabled = true
+                        )
+                        .fillMaxWidth()
+                )
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier.exposedDropdownSize()
+                ) {
+                    options.forEach { option ->
+                        DropdownMenuItem(
+                            text = { Text(option) },
+                            onClick = {
+                                coroutineScope.launch {
+                                    withContext(Dispatchers.IO) {
+                                        setConfigTrackMethod(option)
+                                        selectedItem = option
+                                        expanded = false
+                                    }
+                                }
+                            },
+                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
