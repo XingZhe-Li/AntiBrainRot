@@ -37,6 +37,7 @@ import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import kotlin.random.Random
 
 private val BottomAxisValueFormatter =
     object : CartesianValueFormatter {
@@ -96,22 +97,33 @@ fun MetricGraph(metricList : List<Metric>) {
     var displayOptions by LocalDisplayOptions.current
     var vicoColors by remember { mutableStateOf(listOf<Color>())}
 
-    val timeStamps = metricList.map {
+    val numberLimit = 1000
+    val filterPossibility =  numberLimit / metricList.size.toFloat()
+
+    val numberLimitedMetricList = if (filterPossibility < 1) {
+        metricList.filter {
+            Random.nextFloat() <= filterPossibility
+        }
+    } else {
+        metricList
+    }
+
+    val timeStamps = numberLimitedMetricList.map {
         it.timeStamp
     }
-    val useTimeFactors = metricList.map {
+    val useTimeFactors = numberLimitedMetricList.map {
         it.useTimeFactor
     }
-    val maxTimeFactors = metricList.map {
+    val maxTimeFactors = numberLimitedMetricList.map {
         it.maxTimeFactor
     }
-    val timeInDebts = metricList.map {
+    val timeInDebts = numberLimitedMetricList.map {
         it.timeInDebt
     }
-    val evaluators = metricList.map {
+    val evaluators = numberLimitedMetricList.map {
         it.useTimeFactor * useTimeFactorMultiplier + it.maxTimeFactor * maxTimeFactorMultiplier
     }
-    val thresholds = metricList.map {
+    val thresholds = numberLimitedMetricList.map {
         threshold
     }
     val modelProducer = remember { CartesianChartModelProducer() }
