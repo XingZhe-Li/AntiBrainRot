@@ -5,6 +5,7 @@ import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getContr
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getFastStartHours
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getMaxLossRatePerDay
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getUsageLossRatePerDay
+import com.github.xingzheli.antibrainrot.shared.RuntimeConfig.useTimeFactorMultiplier
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
@@ -56,14 +57,19 @@ suspend fun updateTimeInDebt (
     usedTimeIncrement : Long,
     useTimeFactor     : Double
 ) : Double {
+    val realUseTimeFactor = max(min(
+        useTimeFactorMultiplier * useTimeFactor,
+        1.0
+    ),0.0)
+
     return if (usingInt == 1L) {
         max(
-            oldTimeInDebt + usedTimeIncrement / 1000.0  * (1 - useTimeFactor),
+            oldTimeInDebt + usedTimeIncrement / 1000.0  * (1 - realUseTimeFactor),
             0.0
         )
     } else {
         max(
-            oldTimeInDebt - usedTimeIncrement / 1000.0 * useTimeFactor,
+            oldTimeInDebt - usedTimeIncrement / 1000.0 * realUseTimeFactor,
             0.0
         )
     }
