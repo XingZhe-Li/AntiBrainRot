@@ -140,7 +140,7 @@
     <string name="config_status_reset_snackbar">status is now reset!</string>
 
     <!-- About Screen -->
-    <string name="about_version_info">version 0.0.3\ncopyright 2025 XingZhe-Li, All Rights Reserved.</string>
+    <string name="about_version_info">version 0.0.4\ncopyright 2025 XingZhe-Li, All Rights Reserved.</string>
 
     <!-- Control Screen -->
     <string name="control_threshold_title">Control Threshold</string>
