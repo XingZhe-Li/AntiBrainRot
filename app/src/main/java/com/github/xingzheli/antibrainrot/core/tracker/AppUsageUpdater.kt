@@ -28,8 +28,10 @@ suspend fun appUsageUpdater() {
         val newLastUsageRecord = appendUsageRecord(appPackageName,usageEvent.timestamp,true,appList,lastUsageRecord)
         val newLastMetricRecord = appendMetricRecordWithLast(usageEvent.timestamp,lastUsageRecord,lastMetricRecord)
 
-        lastUsageRecord = if (lastUsageRecord != null && newLastUsageRecord.id != lastUsageRecord.id) {
+        lastUsageRecord = if (lastUsageRecord != null && newLastUsageRecord.id == 0L) {
             newLastUsageRecord.copy(id = lastUsageRecord.id + 1)
+        } else if (lastUsageRecord == null) {
+            newLastUsageRecord.copy(id = 1L)
         } else {
             newLastUsageRecord
         }
