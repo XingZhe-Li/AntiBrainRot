@@ -35,9 +35,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.github.xingzheli.antibrainrot.core.tracker.onAppEffect
 import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getUIUseDrawer
 import com.github.xingzheli.antibrainrot.ui.interfaces.RegistryEntry
+import com.github.xingzheli.antibrainrot.ui.interfaces.context.LocalIsFirstLoad
 import com.github.xingzheli.antibrainrot.ui.interfaces.context.LocalNavHostController
 import com.github.xingzheli.antibrainrot.ui.interfaces.context.LocalSnackBarHostState
 import com.github.xingzheli.antibrainrot.ui.interfaces.startRegistry
@@ -46,22 +46,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@Composable
-fun AppEffect() {
-    LaunchedEffect(Unit) {
-        withContext(Dispatchers.IO) {
-            onAppEffect()
-        }
-    }
-}
 
 @Composable
 fun AppContainer() {
     val snackbarHostState = remember { SnackbarHostState() }
+    val isFirstLoad = remember { mutableStateOf(true) }
 
-    AppEffect() // for task execution purpose.
     CompositionLocalProvider (
-        LocalSnackBarHostState provides snackbarHostState
+        LocalSnackBarHostState provides snackbarHostState,
+        LocalIsFirstLoad provides isFirstLoad
     ) {
         AppTheme {
             Scaffold (

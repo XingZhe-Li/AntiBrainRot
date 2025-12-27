@@ -200,4 +200,7 @@
     <string name="tutorial_usage_events_based_tracking_paragraph1">由于无障碍服务保活很麻烦，容易被杀，想来想去还是搞了一个基于系统记录的使用数据的指标更新，会在每次打开应用时计算更新值</string>
     <string name="tutorial_usage_events_based_tracking_paragraph2">基于使用事件的追踪模式不支持拦截，且同样不支持关闭追踪（如果你不需要就一直别打开App），那么数据永远都不会得到更新。</string>
     <string name="tutorial_usage_events_based_tracking_paragraph3">使用这一模式的权限在此开启：</string>
+
+    <string name="appusageevents_update">同步历史事件</string>
+    <string name="appusageevents_updating">历史事件同步中</string>
 </resources>

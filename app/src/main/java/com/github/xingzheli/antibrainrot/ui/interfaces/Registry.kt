@@ -13,6 +13,7 @@ import com.github.xingzheli.antibrainrot.ui.interfaces.settings.control.Control
 import com.github.xingzheli.antibrainrot.ui.interfaces.settings.ui.UISettings
 import com.github.xingzheli.antibrainrot.ui.interfaces.status.Status
 import com.github.xingzheli.antibrainrot.ui.interfaces.tutorial.Tutorial
+import com.github.xingzheli.antibrainrot.ui.interfaces.util.Loading
 
 enum class RegistryEntry(
     val route   : String,
@@ -29,7 +30,8 @@ enum class RegistryEntry(
     SETTINGS_UI ("settings/ui" ,{ UISettings() } ),
     SETTINGS_CONFIG ("settings/config" ,{ Config() } ),
     SETTINGS_CONTROL ("settings/control" ,{ Control() } ),
-    SETTINGS_ABOUT ("settings/about" ,{ About() } )
+    SETTINGS_ABOUT ("settings/about" ,{ About() } ),
+    LOADING ("loading", { Loading() } )
 }
 
 val startRegistry = RegistryEntry.INTRO

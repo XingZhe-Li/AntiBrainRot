@@ -199,4 +199,7 @@
     <string name="tutorial_usage_events_based_tracking_paragraph1">"Since accessibility need to keep your application alive in the background, and manage to not be killed both by system and users. "</string>
     <string name="tutorial_usage_events_based_tracking_paragraph2">I\'m now proposing a new model that automatically update all metrics based on system provided appUsageEvents data.</string>
     <string name="tutorial_usage_events_based_tracking_paragraph3">But user permission is also required!</string>
+
+    <string name="appusageevents_update">AppUsageEvents Update</string>
+    <string name="appusageevents_updating">AppUsageEvents Updating</string>
 </resources>

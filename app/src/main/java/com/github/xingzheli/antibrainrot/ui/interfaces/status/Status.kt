@@ -2,6 +2,7 @@ package com.github.xingzheli.antibrainrot.ui.interfaces.status
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.GraphicEq
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -26,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,9 +42,12 @@ import com.github.xingzheli.antibrainrot.R
 import com.github.xingzheli.antibrainrot.core.tracker.accelerateFactor
 import com.github.xingzheli.antibrainrot.core.tracker.evaluator
 import com.github.xingzheli.antibrainrot.data.Accessor.getLastMetricRecord
+import com.github.xingzheli.antibrainrot.data.datastore.PreferenceProxy.getConfigTrackMethod
 import com.github.xingzheli.antibrainrot.data.room.Metric
+import com.github.xingzheli.antibrainrot.ui.interfaces.RegistryEntry
 import com.github.xingzheli.antibrainrot.ui.interfaces.context.LocalNavHostController
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
@@ -52,7 +58,7 @@ fun StatusTopBar() {
         Modifier
             .fillMaxWidth()
             .height(64.dp)
-            .padding(16.dp,0.dp),
+            .padding(16.dp, 0.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
@@ -86,7 +92,9 @@ fun StatusTopBar() {
 @Composable
 fun StatusHeaderIcon() {
     Column (
-        Modifier.fillMaxSize().padding(16.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon (
@@ -146,7 +154,7 @@ fun StatusCurrentMetrics() {
 
     Box (
         Modifier
-            .padding(24.dp,0.dp)
+            .padding(24.dp, 0.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(24.dp))
             .background(MaterialTheme.colorScheme.surfaceContainer)
@@ -220,6 +228,13 @@ fun StatusCurrentMetrics() {
 @Composable
 fun StatusContentContainer() {
     val scrollState = rememberScrollState()
+    var showUpdater by remember { mutableStateOf(false) }
+    val navHostController = LocalNavHostController.current
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        showUpdater = (getConfigTrackMethod() == "appUsageEvent")
+    }
 
     Column (
         Modifier
@@ -228,6 +243,31 @@ fun StatusContentContainer() {
     ) {
         StatusHeaderIcon()
         StatusCurrentMetrics()
+
+        if (showUpdater) {
+            Box(
+                modifier = Modifier
+                    .padding(24.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(MaterialTheme.colorScheme.surfaceContainer)
+                    .clickable {
+                        coroutineScope.launch {
+                            navHostController.navigate(
+                                RegistryEntry.LOADING.route
+                            )
+                        }
+                    }
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    stringResource(R.string.appusageevents_update),
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+        }
     }
 }
 
