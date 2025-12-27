@@ -39,7 +39,7 @@ suspend fun appendUsageRecord(
     trackOn : Boolean,
     appList : List<MonitorApps>,
     lastUsageRecord: UsageRecord?
-) : UsageRecord? {
+) : UsageRecord {
     if (lastUsageRecord == null) {
         if (trackOn) {
             val appMatch = appList.find {
