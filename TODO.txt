@@ -1,0 +1,3 @@
+- [] Record Inplace 修复
+- [] 考虑将指标归一化? 用熵 + sigmoid 来计算Max Time Factor
+- [] Loading Feature

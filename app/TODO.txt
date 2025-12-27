@@ -1,4 +1,0 @@
-- [] README
-- [] Translation
-- [] Tutorial
-- [] Website
